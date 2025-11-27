@@ -48,6 +48,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         return UserDefaults.standard.bool(forKey: "ClickToHideEnabled")
     }() 
+    private var clickAction: String = {
+        return UserDefaults.standard.string(forKey: "ClickAction") ?? "hide"
+    }()
     var appDict: [String: String] = [:]
     var currentVersion: String = "" // Add this line to define currentVersion
     private var debounceTimer: Timer?
@@ -89,6 +92,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Register for ClickToHideStateChanged notifications
         NotificationCenter.default.addObserver(self, selector: #selector(updateClickToHideState(_:)), name: NSNotification.Name("ClickToHideStateChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateClickAction(_:)), name: NSNotification.Name("ClickActionChanged"), object: nil)
 
         // Start observing Dock changes.
         let center = NSWorkspace.shared.notificationCenter
@@ -200,11 +204,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         // must be set after launchApp() to get most consistent results
                         app.unhide()
                         app.activate()
+                        shouldSuppressEvent = true
                     } else {
-                        let success = app.hide() // Minimize the app
-                        print("App minimized \(success): \(app.localizedName ?? "Unknown")")
+                        if appDelegate.clickAction == "minimize" {
+                            shouldSuppressEvent = appDelegate.minimizeApp(app)
+                        } else {
+                            let success = app.hide() // Hide the app
+                            print("App hidden \(success): \(app.localizedName ?? "Unknown")")
+                            shouldSuppressEvent = true
+                        }
                     }
-                    shouldSuppressEvent = true
                 } else {
                     // Print all running applications' localized names
                     let runningAppNames = runningApps.map { $0.localizedName ?? "Unknown" }
@@ -509,6 +518,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Delay termination by 1 second
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             NSApplication.shared.terminate(nil)
+        }
+    }
+
+    @objc func updateClickAction(_ notification: Notification) {
+        if let action = notification.object as? String {
+            clickAction = action
+        }
+    }
+
+    func minimizeApp(_ app: NSRunningApplication) -> Bool {
+        let pid = app.processIdentifier
+        let appElement = AXUIElementCreateApplication(pid)
+        
+        var focusedWindow: AnyObject?
+        let result = AXUIElementCopyAttributeValue(appElement, kAXFocusedWindowAttribute as CFString, &focusedWindow)
+        
+        if result == .success, let window = focusedWindow {
+            let windowElement = window as! AXUIElement
+            AXUIElementSetAttributeValue(windowElement, kAXMinimizedAttribute as CFString, true as CFTypeRef)
+            print("Minimized focused window for \(app.localizedName ?? "Unknown")")
+            return true
+        } else {
+            print("Failed to find focused window for \(app.localizedName ?? "Unknown")")
+            return false
         }
     }
 
