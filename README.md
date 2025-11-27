@@ -2,11 +2,11 @@
 
 ![Click2Hide Logo](Click2Hide/Assets.xcassets/AppIcon.appiconset/128-mac.png)
 
-> ## ✨ New Features in this Fork
-> 
-> - **Minimize Support**: Added option to minimize windows instead of just hiding them.
-> - **Configurable Action**: Choose between "Hide" or "Minimize" mode in the settings.
-> - **Improved Restore**: Clicking the Dock icon again reliably restores the application window.
+## ✨ New Features in this Fork
+
+- **Minimize Support**: Added option to minimize windows instead of just hiding them.
+- **Configurable Action**: Choose between "Hide" or "Minimize" mode in the settings.
+- **Improved Restore**: Clicking the Dock icon again reliably restores the application window.
 
 ## Overview
 
