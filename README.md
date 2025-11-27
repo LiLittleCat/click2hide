@@ -2,6 +2,12 @@
 
 ![Click2Hide Logo](Click2Hide/Assets.xcassets/AppIcon.appiconset/128-mac.png)
 
+> ## ✨ New Features in this Fork
+> 
+> - **Minimize Support**: Added option to minimize windows instead of just hiding them.
+> - **Configurable Action**: Choose between "Hide" or "Minimize" mode in the settings.
+> - **Improved Restore**: Clicking the Dock icon again reliably restores the application window.
+
 ## Overview
 
 No more hunting for hidden windows on your Mac. **Click2Hide** automatically hide/un-minimizes apps when you click on the app icon on dock, saving you precious time and frustration whether you're deep in a presentation, juggling multiple projects, or simply desire a cleaner workspace.
@@ -22,8 +28,9 @@ https://github.com/user-attachments/assets/16ccca31-f3f3-4948-8f84-d06c84ac292c
 
 ## Usage
 
-- **Hide Applications**: Simply click on the Dock icon of the application you wish to hide.
-- **Unhide Applications**: If the application is already hidden, clicking its Dock icon will unhide it.
+- **Hide or Minimize**: Choose your preferred action in the settings menu: "Hide" or "Minimize".
+- **Click to Action**: Simply click on the Dock icon of an active application to perform the selected action (Hide or Minimize).
+- **Restore**: If the application is hidden or minimized, clicking its Dock icon again will restore it.
 
 ## License
 
