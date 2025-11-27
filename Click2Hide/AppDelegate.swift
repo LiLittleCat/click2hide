@@ -199,18 +199,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     // when app is just minimized without switching focus, it's hidden but still active
                     // there is no simple way to differentiate but good news is next click will work
                     if !app.isActive || app.isHidden {
-                        // Use launch as app.activate() is not reliable and can't unminimize
-                        NSWorkspace.shared.launchApplication(dockItem.appID)
-                        // must be set after launchApp() to get most consistent results
-                        app.unhide()
-                        app.activate()
-                        shouldSuppressEvent = true
+                        shouldSuppressEvent = false
                     } else {
                         if appDelegate.clickAction == "minimize" {
                             shouldSuppressEvent = appDelegate.minimizeApp(app)
                         } else {
-                            let success = app.hide() // Hide the app
-                            print("App hidden \(success): \(app.localizedName ?? "Unknown")")
+                            _ = app.hide() // Hide the app
                             shouldSuppressEvent = true
                         }
                     }
@@ -537,10 +531,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if result == .success, let window = focusedWindow {
             let windowElement = window as! AXUIElement
             AXUIElementSetAttributeValue(windowElement, kAXMinimizedAttribute as CFString, true as CFTypeRef)
-            print("Minimized focused window for \(app.localizedName ?? "Unknown")")
             return true
         } else {
-            print("Failed to find focused window for \(app.localizedName ?? "Unknown")")
             return false
         }
     }
