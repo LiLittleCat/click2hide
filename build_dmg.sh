@@ -6,7 +6,8 @@ APP_PATH="build/Build/Products/Release/$APP_NAME.app"
 DMG_NAME="$APP_NAME.dmg"
 DMG_PATH="dist/$DMG_NAME"
 TEMP_DIR="temp_dmg_contents"                                     # Temporary directory for DMG contents
-CODE_SIGN_IDENTITY="Apple Development: Victor Weng (SBQKADNQZW)" # Replace with your code signing identity
+# CODE_SIGN_IDENTITY="Apple Development: Victor Weng (SBQKADNQZW)" # Replace with your code signing identity
+CODE_SIGN_IDENTITY="-" # Ad-hoc signing for local use
 
 # Create the build directory if it doesn't exist
 mkdir -p build
